@@ -1,0 +1,58 @@
+   _____            __     __ __     __  __              
+  / __(_)_ _  ___  / /_ __/ // /__  / /_/ /_____ __ _____
+ _\ \/ /  ' \/ _ \/ / // / _  / _ \/ __/  '_/ -_) // (_-<
+/___/_/_/_/_/ .__/_/\_, /_//_/\___/\__/_/\_\\__/\_, /___/
+           /_/     /___/                       /___/     
+
+CONTENTS OF THIS FILE
+---------------------
+ * Introduction
+ * Requirements
+ * Installation
+ * Configuration
+ * Troubleshooting
+ * FAQ
+ * Maintainers
+ 
+ INTRODUCTION
+------------
+This project is designed to make life easier for people who 
+use Microsoft Windows. In this application it will be possible 
+to add text and keystrokes that you can activate via hotkeys 
+in any application running on Microsoft Windows.
+
+REQUIREMENTS
+------------
+This application is tested on the following systems:
+* Microsoft Windows XP
+* Microsoft Windows 7
+
+INSTALLATION
+------------
+There is currently no installfiles available.
+You can run SimplyHotkeys.exe from any folder.
+If you want it to automaticly start when you start Windows,
+you can add a shortcut to the following folder:
+Windows 7: C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
+
+CONFIGURATION
+-------------
+To configure hotkeys, double-click the icon in systemtray. 
+You will then get access to a GUI (graphical user interface) 
+that will explain what to do.
+
+TROUBLESHOOTING
+---------------
+You can troubleshoot the hotkeys database by opening and view 
+or edit c:\hotkey.ini
+
+FAQ
+---
+Q: How do i add keystrokes to my hotkey?
+A: You can add for example {tab} or {enter}, to make it push 
+   those buttons
+
+MAINTAINERS
+-----------
+Patchie
+r4nd0m1

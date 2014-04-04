@@ -134,11 +134,11 @@ Return
 
 ;Saves changes to registry, if you want the app to start with windows or not
 Registry_load:
-	RegRead, tempvar, HKEY_LOCAL_MACHINE, SOFTWARE\Microsoft\Windows\CurrentVersion\Run, Persistence
-	if ErrorLevel   ; i.e. it's not blank or zero.
-		MsgBox, Registry har ikke denne...%ErrorLevel%...%tempvar%...%A_LastError%
+	RegRead, tempvar, HKEY_LOCAL_MACHINE, SOFTWARE\Microsoft\Windows\CurrentVersion\Run, SimplyHotkeys
+	if ErrorLevel
+		MsgBox, Autohotkey cannot find the registry string.`n Errorlevel: %ErrorLevel%`n Tempvar: %tempvar%`n A_LastError: %A_LastError%
 	else
-		MsgBox, Registry har denne
+		MsgBox, Autohotkey can find the string, everything works perfect.`n Tempvar: %tempvar%
 	
 Return
 

@@ -40,10 +40,10 @@ AHK_NOTIFYICON(wParam, lParam)
 				Gui, Add, Text, x5 y28, This application is made for printing text into emails, webpages or other applications,
 				Gui, Add, Text, xp yp+15, where you type in the same text several times a day.
 				Gui, Add, Text, xp yp+30, I hope you enjoy the application.
-				Gui, Add, Text, xp yp+30, If you have any comments, suggestions or feedback,
-				Gui, Add, Text, xp yp+15, please don't hesitate to contact me by email
-				Gui, Add, Text, xp+210 yp cblue, Patchie@gmail.com
-				Gui, Add, Text, xp+100 yp, or r4nd0m1 on #AHK @ Freenode.		
+				Gui, Add, Text, xp yp+30, If you have any comments, suggestions or feedback, please
+				Gui, Add, Text, xp yp+15, don't hesitate to contact me by email
+				Gui, Add, Text, xp+175 yp cblue, Patchie@gmail.com
+				Gui, Add, Text, xp+97 yp, or r4nd0m1 on #AHK@Freenode.
 				Gui, Add, Text, x5 yp+30, Patchie
 		}
 		Gui, Show, x10 y10 w460 h410, SimplyHotkeys

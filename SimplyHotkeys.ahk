@@ -14,12 +14,12 @@ AHK_NOTIFYICON(wParam, lParam)
 	if (lParam = 515)
 	{ 	if not (WinExist("ahk_id " GuiID))	;Only create the gui one time, not each time you wanna see it
 		{ 	Gui, Add, Text, x330 y445 w200 h20 , Made by Patchie and r4nd0m1
-			Gui, Add, Tab, x0 y0 w480 h440 , Hotkeys|Howto
+			Gui, Add, Tab, x0 y0 w480 h440 , Hotkeys|Howto|Config
 			Gui, Tab, 1
 			Gui, Add, GroupBox, x6 y28 w460 h230 , Select hotkey to edit
 			Gui, Add, ListView, xp+10 yp+20 wp-20 hp-30 Checked Grid AltSubmit -Multi -NoSortHdr vLV gHotkeyList, Enabled|Hotkey|Value
 			Loop, 10
-				LV_Add(Hotkey_enabled%A_Index%, "", "ctrl+" A_Index, Hotkey%A_Index%)
+				LV_Add(Hotkey_enabled%A_Index%?"check":"", "", "ctrl+" A_Index, Hotkey%A_Index%)
 			LV_Modify(1,"Select Focus")
 			Gui, Add, GroupBox, x6 y260 w460 h140, Insert text for the selected hotkey
 			Gui, Add, Edit, xp+10 yp+20 wp-20 hp-30 gGuiSubmit vEdit1, %Hotkey1%
@@ -60,6 +60,7 @@ HotkeyList:
 ^9::
 ^0::
 	StringTrimLeft, Hotkey#, A_ThisHotkey, 1
+	Hotkey#:=Hotkey#=0?Hotkey#+10:Hotkey#
 	if (Hotkey_enabled%Hotkey#%="check")
 		send % Hotkey%Hotkey#%
 	return
@@ -76,8 +77,9 @@ Settings_save:
 
 	Loop 
 	{	RowNumber := LV_GetNext(RowNumber, "Checked")
-		ifEqual, RowNumber,, break
-		Hotkey_enabled%RowNumber% = Check
+		if !(RowNumber) || (A_Index>10)
+		  break
+		Hotkey_enabled%RowNumber%=1
 	}
 	
 	Loop, 10 ;Saving if the hotkey is enabled or disabled to file
@@ -98,8 +100,8 @@ Settings_load:
 	if not (FileExist("c:\SimplyHotkeys.ini"))
 		return
 	Loop, 10
-	{ 	IniRead, Hotkey_enabled%A_Index%, c:\SimplyHotkeys.ini, Hotkeys, Hotkey_enabled%A_Index%
-		IniRead, Hotkey%A_Index%, c:\SimplyHotkeys.ini, Hotkeys, Hotkey%A_Index%
+	{ 	IniRead, Hotkey_enabled%A_Index%, c:\SimplyHotkeys.ini, Hotkeys, Hotkey_enabled%A_Index%, 0
+		IniRead, Hotkey%A_Index%, c:\SimplyHotkeys.ini, Hotkeys, Hotkey%A_Index%, %A_Space%
 		StringReplace, Hotkey%A_Index%, Hotkey%A_Index%, |, `n, 1
 	}
 	return
@@ -116,10 +118,9 @@ GuiSubmit:
 
 ;Saves and closes the application when you exit from the systemtray
 GuiClose:
-	;traytip,, % "Saved successfully to file`nCTRL + 1: " Hotkey1 "`nCTRL + 2: " Hotkey2 "`nCTRL + 3: " Hotkey3 "`nCTRL + 4: " Hotkey4 "`nCTRL + 5: " 
-	;. Hotkey5 "`n	CTRL + 6: " Hotkey6 "`nCTRL + 7: " Hotkey7 "`nCTRL + 8: " Hotkey8 "`nCTRL + 9: " Hotkey9 "`nCTRL + 0: " Hotkey10
-	GoSub, Settings_save
-	if (A_ExitReason="")
+	if not (A_ExitReason)
+	{	GoSub, Settings_save
+		;traytip,, % "Saved successfully to file`nCTRL + 1: " Hotkey1 "`nCTRL + 2: " Hotkey2 "`nCTRL + 3: " Hotkey3 "`nCTRL + 4: " Hotkey4 "`nCTRL + 5: " Hotkey5 "`nCTRL + 6: " Hotkey6 "`nCTRL + 7: " Hotkey7 "`nCTRL + 8: " Hotkey8 "`nCTRL + 9: " Hotkey9 "`nCTRL + 0: " Hotkey10
 		Gui, destroy
-	else ExitApp
+	}	else ExitApp
 	return

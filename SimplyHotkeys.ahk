@@ -17,34 +17,34 @@ AHK_NOTIFYICON(wParam, lParam)
 	{ 	ToolTip
 	    if not (WinExist("ahk_id " GuiID))	;Only create the gui one time, not each time you wanna see it
 		{ 	Gui, +hwndGuiID
-		    Gui, Add, Tab, x-2 y0 w480 h390, Hotkeys|Howto|Config
-			Gui, Font, bold
-			Gui, Add, GroupBox, x5 y28 w450 h220, Select hotkey to edit
-			Gui, Font, norm
-			Gui, Add, ListView, xp+7 yp+18 wp-15 r10 Checked Grid AltSubmit -Multi -NoSortHdr vLV gHotkeyList, |Hotkey|Text
-			Loop, 10
-				LV_Add(Hotkey_enabled%A_Index%?"check":"", "", "ctrl+" A_Index, Hotkey%A_Index%)
-			LV_Modify(1,"Select Focus")
-			Gui, Font, bold
-			Gui, Add, GroupBox, x5 yp+205 w450 h130, Insert text for the selected hotkey
-			Gui, Font, norm
-			Gui, Add, Edit, xp+7 yp+18 wp-15 r7 gGuiSubmit vEdit1, %Hotkey1%
-			Gui, Tab, 2
-			Gui, Add, Text, x5 y28, This application is made for printing text into emails, webpages or other applications,
-			Gui, Add, Text, xp yp+15, where you type in the same text several times a day.
-			Gui, Add, Text, xp yp+30, I hope you enjoy the application.
-			Gui, Add, Text, xp yp+30, If you have any comments, suggestions or feedback,
-			Gui, Add, Text, xp yp+15, please don't hesitate to contact me by email
-			Gui, Add, Text, xp+210 yp cblue, Patchie@gmail.com
-			Gui, Add, Text, xp+100 yp, or r4nd0m1 on #AHK.		
-			Gui, Add, Text, x5 yp+30, Patchie
-			Gui, Tab, 3
-			Gui, Font, bold
-			Gui, Add, GroupBox, x5 y28 w75 h40, StartUp
-			Gui, Font, norm
-			Gui, Add, CheckBox, xp+5 yp+18 gGuiSubmit vStartUp_GUI checked%StartUp_GUI%, show GUI
-			Gui, Tab
 			Gui, Add, Text, x310 y395, Made by Patchie and r4nd0m1
+		    Gui, Add, Tab, x-2 y0 w480 h390, Hotkeys|Config|Howto
+			Gui, Tab, 1
+				Gui, Font, bold
+				Gui, Add, GroupBox, x5 y28 w450 h220, Select hotkey to edit
+				Gui, Font, norm
+				Gui, Add, ListView, xp+7 yp+18 wp-15 r10 Checked Grid AltSubmit -Multi -NoSortHdr vLV gHotkeyList, |Hotkey|Text
+				Loop, 10
+					LV_Add(Hotkey_enabled%A_Index%?"check":"", "", "ctrl+" A_Index, Hotkey%A_Index%)
+				LV_Modify(1,"Select Focus")
+				Gui, Font, bold
+				Gui, Add, GroupBox, x5 yp+205 w450 h130, Insert text for the selected hotkey
+				Gui, Font, norm
+				Gui, Add, Edit, xp+7 yp+18 wp-15 r7 gGuiSubmit vEdit1, %Hotkey1%
+			Gui, Tab, 2
+				Gui, Font, bold
+				Gui, Add, GroupBox, x5 y28 w75 h40, StartUp
+				Gui, Font, norm
+				Gui, Add, CheckBox, xp+5 yp+18 gGuiSubmit vStartUp_GUI checked%StartUp_GUI%, show GUI
+			Gui, Tab, 3
+				Gui, Add, Text, x5 y28, This application is made for printing text into emails, webpages or other applications,
+				Gui, Add, Text, xp yp+15, where you type in the same text several times a day.
+				Gui, Add, Text, xp yp+30, I hope you enjoy the application.
+				Gui, Add, Text, xp yp+30, If you have any comments, suggestions or feedback,
+				Gui, Add, Text, xp yp+15, please don't hesitate to contact me by email
+				Gui, Add, Text, xp+210 yp cblue, Patchie@gmail.com
+				Gui, Add, Text, xp+100 yp, or r4nd0m1 on #AHK @ Freenode.		
+				Gui, Add, Text, x5 yp+30, Patchie
 		}
 		Gui, Show, x10 y10 w460 h410, SimplyHotkeys
 		GuiControl, Focus, Edit1

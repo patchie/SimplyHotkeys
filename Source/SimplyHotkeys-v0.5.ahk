@@ -36,7 +36,7 @@ AHK_NOTIFYICON(wParam, lParam)
 				Gui, Add, GroupBox, x5 y28 w450 h60, General
 				Gui, Font, norm
 				Gui, Add, CheckBox, xp+5 yp+18 gGuiSubmit vStartUp_GUI checked%StartUp_GUI%, show GUI when the application is started
-				Gui, Add, CheckBox, yp+18 gRegistry_save vWindowsStartUp checked%WindowsStartUp%, Automatically start application with windows on boot.
+				Gui, Add, CheckBox, yp+18 gRegistry_save vWindowsStartUpFetch checked%WindowsStartUp%, Automatically start application with windows on boot.
 			Gui, Tab, 3
 				Gui, Add, Text, x5 y28, This application is made for printing text into emails, webpages or other applications,
 				Gui, Add, Text, xp yp+15, where you type in the same text several times a day.
@@ -128,18 +128,39 @@ return
 ;Saves changes to registry, if you want the app to start with windows or not
 Registry_save:
 	;We need to check if the user is allowed to change in registry, is this a admin user? and tell the user if he's not
-	MsgBox, registry save		;just for testing purposes
-	GoSub, Registry_load		;just for testing purposes
+	Gui, Submit, Nohide
+	;MsgBox, registry save		;just for testing purposes
+	GoSub, Registry_load
+	if (WindowsStartUp = "0" and WindowsStartUpFetch = "1"){
+		;MsgBox, WindowsStartUp: %WindowsStartUp%`n WindowsStartUpFetch: %WindowsStartUpFetch%`n Change to enabled startup
+		if (A_IsCompiled = "1") {
+			RegWrite, REG_SZ, HKEY_LOCAL_MACHINE, SOFTWARE\Microsoft\Windows\CurrentVersion\Run, SimplyHotkeys, %A_ScriptFullPath%
+			;MsgBox, Added to registry: %A_ScriptFullPath%
+		}else{
+			MsgBox, 16,ERROR 14!, You cannot add a .ahk script to startup unless you compile it first.
+			GuiControl, , WindowsStartUpFetch, 0
+		}
+	}else If (WindowsStartUp = "1" and WindowsStartUpFetch = "0"){
+		;MsgBox, WindowsStartUp: %WindowsStartUp%`n WindowsStartUpFetch: %WindowsStartUpFetch%`n Change to disabled startup
+		RegDelete, HKEY_LOCAL_MACHINE, SOFTWARE\Microsoft\Windows\CurrentVersion\Run, SimplyHotkeys
+	}
+	;else{
+	;	MsgBox, WindowsStartUp: %WindowsStartUp%`n WindowsStartUpFetch: %WindowsStartUpFetch%`n No change, dont change anything
+	;}	
 Return
 
 ;Saves changes to registry, if you want the app to start with windows or not
 Registry_load:
-	RegRead, tempvar, HKEY_LOCAL_MACHINE, SOFTWARE\Microsoft\Windows\CurrentVersion\Run, SimplyHotkeys
-	if ErrorLevel
-		MsgBox, Autohotkey cannot find the registry string.`n Errorlevel: %ErrorLevel%`n Tempvar: %tempvar%`n A_LastError: %A_LastError%
-	else
-		MsgBox, Autohotkey can find the string, everything works perfect.`n Tempvar: %tempvar%
-	
+	RegRead, RegistryReadVar, HKEY_LOCAL_MACHINE, SOFTWARE\Microsoft\Windows\CurrentVersion\Run, SimplyHotkeys
+	if ErrorLevel {
+		;MsgBox, Autohotkey cannot find the registry string.`n ;Errorlevel: %ErrorLevel%`n RegistryReadVar: %RegistryReadVar%`n A_LastError: %A_LastError%
+		WindowsStartUp = 0
+		;GuiControl, , WindowsStartUpFetch, 0
+	} else {
+		;MsgBox, Autohotkey can find the registry string.;`n RegistryReadVar: %RegistryReadVar%
+		WindowsStartUp = 1
+		;GuiControl, , WindowsStartUpFetch, 1
+	}
 Return
 
 ;Saves to file each time you edit a field

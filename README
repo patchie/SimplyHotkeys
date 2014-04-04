@@ -29,11 +29,10 @@ This application is tested on the following systems:
 
 INSTALLATION
 ------------
-There is currently no installfiles available.
-You can run SimplyHotkeys.exe from any folder.
-If you want it to automaticly start when you start Windows,
-you can add a shortcut to the following folder:
-Windows 7: C:\ProgramData\Microsoft\Windows\Start Menu\Programs\Startup
+You will find SimplyHotkeys-setup-v0.5.exe inside the "Installer" 
+folder here on github(https://github.com/patchie/SimplyHotkeys).
+The installer will automatically set SimplyHotkeys to startup 
+with windows. You can change this feature inside the application.
 
 CONFIGURATION
 -------------
@@ -51,6 +50,13 @@ FAQ
 Q: How do i add keystrokes to my hotkey?
 A: You can add for example {tab} or {enter}, to make it push 
    those buttons
+
+TODO
+----
+* Change the rightclick systemtray menu
+* Adding a better howto in the gui
+* Adding "hotstrings" tab (http://ahkscript.org/docs/Hotstrings.htm)
+* New screenshots
 
 MAINTAINERS
 -----------

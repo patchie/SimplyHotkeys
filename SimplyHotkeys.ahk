@@ -1,23 +1,27 @@
 #NoEnv
 #SingleInstance, Force
+#NoTrayIcon
 SetWorkingDir, %A_ScriptDir%
 OnMessage(0x404, "AHK_NOTIFYICON")	;When you doubleclick on the systemtray icon, show the gui.
 OnExit, GuiClose
-GoSub, Settings_load	;Load from settings.ini
 Menu, Tray, Icon, icon.ico
+Menu, Tray, Icon
+GoSub, Settings_load	;Load from settings.ini
+(StartUp_GUI=1)?AHK_NOTIFYICON(0,515)
 ;traytip,, % "Loaded successfully from file`nCTRL + 1: " Hotkey1 "`nCTRL + 2: " Hotkey2 "`nCTRL + 3: " Hotkey3 "`nCTRL + 4: " Hotkey4 "`nCTRL + 5: " Hotkey5 "`nCTRL + 6: " Hotkey6 "`nCTRL + 7: " Hotkey7 "`nCTRL + 8: " Hotkey8 "`nCTRL + 9: " Hotkey9 "`nCTRL + 0: " Hotkey10
 return
 
 AHK_NOTIFYICON(wParam, lParam)
 { 	global
-	ToolTip
 	if (lParam = 515)
-	{ 	if not (WinExist("ahk_id " GuiID))	;Only create the gui one time, not each time you wanna see it
-		{ 	Gui, Add, Tab, x-2 y0 w480 h390 , Hotkeys|Howto|Config
+	{ 	ToolTip
+	    if not (WinExist("ahk_id " GuiID))	;Only create the gui one time, not each time you wanna see it
+		{ 	Gui, +hwndGuiID
+		    Gui, Add, Tab, x-2 y0 w480 h390, Hotkeys|Howto|Config
 			Gui, Font, bold
-			Gui, Add, GroupBox, x5 y28 w450 h220 , Select hotkey to edit
+			Gui, Add, GroupBox, x5 y28 w450 h220, Select hotkey to edit
 			Gui, Font, norm
-			Gui, Add, ListView, xp+7 yp+18 wp-15 r10 Checked Grid AltSubmit -Multi -NoSortHdr vLV gHotkeyList, Enabled|Hotkey|Value
+			Gui, Add, ListView, xp+7 yp+18 wp-15 r10 Checked Grid AltSubmit -Multi -NoSortHdr vLV gHotkeyList, |Hotkey|Text
 			Loop, 10
 				LV_Add(Hotkey_enabled%A_Index%?"check":"", "", "ctrl+" A_Index, Hotkey%A_Index%)
 			LV_Modify(1,"Select Focus")
@@ -26,20 +30,19 @@ AHK_NOTIFYICON(wParam, lParam)
 			Gui, Font, norm
 			Gui, Add, Edit, xp+7 yp+18 wp-15 r7 gGuiSubmit vEdit1, %Hotkey1%
 			Gui, Tab, 2
-			Gui, Add, Text, x5 y28, This application is made for printing text into emails, webpages or other applications
+			Gui, Add, Text, x5 y28, This application is made for printing text into emails, webpages or other applications,
 			Gui, Add, Text, xp yp+15, where you type in the same text several times a day.
 			Gui, Add, Text, xp yp+30, I hope you enjoy the application.
 			Gui, Add, Text, xp yp+30, If you have any comments, suggestions or feedback,
 			Gui, Add, Text, xp yp+15, please don't hesitate to contact me by email
-			Gui, Add, Text, xp+212 yp cblue, Patchie@gmail.com
+			Gui, Add, Text, xp+210 yp cblue, Patchie@gmail.com
 			Gui, Add, Text, xp+100 yp, or r4nd0m1 on #AHK.		
 			Gui, Add, Text, x5 yp+30, Patchie
-			
 			Gui, Tab, 3
 			Gui, Font, bold
 			Gui, Add, GroupBox, x5 y28 w75 h40, StartUp
 			Gui, Font, norm
-			Gui, Add, CheckBox, xp+5 yp+18 disabled, show GUI
+			Gui, Add, CheckBox, xp+5 yp+18 gGuiSubmit vStartUp_GUI checked%StartUp_GUI%, show GUI
 			Gui, Tab
 			Gui, Add, Text, x310 y395, Made by Patchie and r4nd0m1
 		}
@@ -106,6 +109,8 @@ Settings_save:
 		IniWrite, % Hotkey%A_Index%, c:\SimplyHotkeys.ini, Hotkeys, Hotkey%A_Index%
 		StringReplace, Hotkey%A_Index%, Hotkey%A_Index%, |, `n, 1
 	}
+	IniWrite, % StartUp_GUI, c:\SimplyHotkeys.ini, MEM, StartUp_GUI
+	
 	return
 
 ;Loads data from c:\SimplyHotkeys.ini
@@ -117,6 +122,7 @@ Settings_load:
 		IniRead, Hotkey%A_Index%, c:\SimplyHotkeys.ini, Hotkeys, Hotkey%A_Index%, %A_Space%
 		StringReplace, Hotkey%A_Index%, Hotkey%A_Index%, |, `n, 1
 	}
+	IniRead, StartUp_GUI, c:\SimplyHotkeys.ini, MEM, StartUp_GUI
 	return
 
 ;Saves to file each time you edit a field
@@ -131,9 +137,12 @@ GuiSubmit:
 
 ;Saves and closes the application when you exit from the systemtray
 GuiClose:
+;msgbox,,, % "---" A_ExitReason "---", 1
 	if not (A_ExitReason)
 	{	GoSub, Settings_save
 		;traytip,, % "Saved successfully to file`nCTRL + 1: " Hotkey1 "`nCTRL + 2: " Hotkey2 "`nCTRL + 3: " Hotkey3 "`nCTRL + 4: " Hotkey4 "`nCTRL + 5: " Hotkey5 "`nCTRL + 6: " Hotkey6 "`nCTRL + 7: " Hotkey7 "`nCTRL + 8: " Hotkey8 "`nCTRL + 9: " Hotkey9 "`nCTRL + 0: " Hotkey10
 		Gui, destroy
 	}	else ExitApp
 	return
+	
+F12::ExitApp

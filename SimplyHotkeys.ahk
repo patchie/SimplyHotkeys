@@ -13,26 +13,39 @@ AHK_NOTIFYICON(wParam, lParam)
 	ToolTip
 	if (lParam = 515)
 	{ 	if not (WinExist("ahk_id " GuiID))	;Only create the gui one time, not each time you wanna see it
-		{ 	Gui, Add, Text, x330 y445 w200 h20 , Made by Patchie and r4nd0m1
-			Gui, Add, Tab, x0 y0 w480 h440 , Hotkeys|Howto|Config
-			Gui, Tab, 1
-			Gui, Add, GroupBox, x6 y28 w460 h230 , Select hotkey to edit
-			Gui, Add, ListView, xp+10 yp+20 wp-20 hp-30 Checked Grid AltSubmit -Multi -NoSortHdr vLV gHotkeyList, Enabled|Hotkey|Value
+		{ 	Gui, Add, Tab, x-2 y0 w480 h390 , Hotkeys|Howto|Config
+			Gui, Font, bold
+			Gui, Add, GroupBox, x5 y28 w450 h220 , Select hotkey to edit
+			Gui, Font, norm
+			Gui, Add, ListView, xp+7 yp+18 wp-15 r10 Checked Grid AltSubmit -Multi -NoSortHdr vLV gHotkeyList, Enabled|Hotkey|Value
 			Loop, 10
 				LV_Add(Hotkey_enabled%A_Index%?"check":"", "", "ctrl+" A_Index, Hotkey%A_Index%)
 			LV_Modify(1,"Select Focus")
-			Gui, Add, GroupBox, x6 y260 w460 h140, Insert text for the selected hotkey
-			Gui, Add, Edit, xp+10 yp+20 wp-20 hp-30 gGuiSubmit vEdit1, %Hotkey1%
+			Gui, Font, bold
+			Gui, Add, GroupBox, x5 yp+205 w450 h130, Insert text for the selected hotkey
+			Gui, Font, norm
+			Gui, Add, Edit, xp+7 yp+18 wp-15 r7 gGuiSubmit vEdit1, %Hotkey1%
 			Gui, Tab, 2
-			Gui, Add, Text, x20 y30 w450 h400 , % "This application is made for printing text into emails, "
-			. "webpages or other applications you type in the same text several times a day.`n`n"
-			. "I hope you enjoy the application.`n`n"
-			. "If you have any comments, suggestions or feedback, don't hesitate to contact me by email: Patchie@gmail.com.`n`n"
-			. "Patchie"
+			Gui, Add, Text, x5 y28, This application is made for printing text into emails, webpages or other applications
+			Gui, Add, Text, xp yp+15, where you type in the same text several times a day.
+			Gui, Add, Text, xp yp+30, I hope you enjoy the application.
+			Gui, Add, Text, xp yp+30, If you have any comments, suggestions or feedback,
+			Gui, Add, Text, xp yp+15, please don't hesitate to contact me by email
+			Gui, Add, Text, xp+212 yp cblue, Patchie@gmail.com
+			Gui, Add, Text, xp+100 yp, or r4nd0m1 on #AHK.		
+			Gui, Add, Text, x5 yp+30, Patchie
+			
+			Gui, Tab, 3
+			Gui, Font, bold
+			Gui, Add, GroupBox, x5 y28 w75 h40, StartUp
+			Gui, Font, norm
+			Gui, Add, CheckBox, xp+5 yp+18 disabled, show GUI
+			Gui, Tab
+			Gui, Add, Text, x310 y395, Made by Patchie and r4nd0m1
 		}
-		Gui, Show, x10 y10 w479 h460, SimplyHotkeys
+		Gui, Show, x10 y10 w460 h410, SimplyHotkeys
 		GuiControl, Focus, Edit1
-		Send, {End}
+		Send, {End}^a
 		return false
 	}
 }
@@ -43,7 +56,7 @@ HotkeyList:
 	{	LV_GetText(RowText, A_EventInfo, 3)
 		GuiControl,, Edit1, %RowText%
 		GuiControl, Focus, Edit1
-		Send, {End}
+		Send, {End}^a
 		GoSub, Settings_save	;Save in case the user has checked/unchecked a checkbox
 	}
 	return	
@@ -61,7 +74,7 @@ HotkeyList:
 ^0::
 	StringTrimLeft, Hotkey#, A_ThisHotkey, 1
 	Hotkey#:=Hotkey#=0?Hotkey#+10:Hotkey#
-	if (Hotkey_enabled%Hotkey#%="check")
+	if (Hotkey_enabled%Hotkey#%)
 		send % Hotkey%Hotkey#%
 	return
 

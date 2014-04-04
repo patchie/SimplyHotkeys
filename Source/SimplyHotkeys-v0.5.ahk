@@ -7,8 +7,8 @@ OnExit, GuiClose
 Menu, Tray, Icon, icon.ico
 Menu, Tray, Icon
 GoSub, Settings_load	;Load from settings.ini
+GoSub, Registry_load	;Load from registry
 (StartUp_GUI=1)?AHK_NOTIFYICON(0,515)
-;traytip,, % "Loaded successfully from file`nCTRL + 1: " Hotkey1 "`nCTRL + 2: " Hotkey2 "`nCTRL + 3: " Hotkey3 "`nCTRL + 4: " Hotkey4 "`nCTRL + 5: " Hotkey5 "`nCTRL + 6: " Hotkey6 "`nCTRL + 7: " Hotkey7 "`nCTRL + 8: " Hotkey8 "`nCTRL + 9: " Hotkey9 "`nCTRL + 0: " Hotkey10
 return
 
 AHK_NOTIFYICON(wParam, lParam)
@@ -33,9 +33,10 @@ AHK_NOTIFYICON(wParam, lParam)
 				Gui, Add, Edit, xp+7 yp+18 wp-15 r7 gGuiSubmit vEdit1, %Hotkey1%
 			Gui, Tab, 2
 				Gui, Font, bold
-				Gui, Add, GroupBox, x5 y28 w75 h40, StartUp
+				Gui, Add, GroupBox, x5 y28 w450 h60, General
 				Gui, Font, norm
-				Gui, Add, CheckBox, xp+5 yp+18 gGuiSubmit vStartUp_GUI checked%StartUp_GUI%, show GUI
+				Gui, Add, CheckBox, xp+5 yp+18 gGuiSubmit vStartUp_GUI checked%StartUp_GUI%, show GUI when the application is started
+				Gui, Add, CheckBox, yp+18 gRegistry_save vWindowsStartUp checked%WindowsStartUp%, Automatically start application with windows on boot.
 			Gui, Tab, 3
 				Gui, Add, Text, x5 y28, This application is made for printing text into emails, webpages or other applications,
 				Gui, Add, Text, xp yp+15, where you type in the same text several times a day.
@@ -62,7 +63,7 @@ HotkeyList:
 		Send, {End}^a
 		GoSub, Settings_save	;Save in case the user has checked/unchecked a checkbox
 	}
-	return	
+return	
 
 ; This is the code that actually sends keystrokes when you press ctrl + 1...etc
 ^1::
@@ -79,7 +80,7 @@ HotkeyList:
 	Hotkey#:=Hotkey#=0?Hotkey#+10:Hotkey#
 	if (Hotkey_enabled%Hotkey#%)
 		send % Hotkey%Hotkey#%
-	return
+return
 
 ;Saves to c:\SimplyHotkeys.ini
 Settings_save:
@@ -110,8 +111,7 @@ Settings_save:
 		StringReplace, Hotkey%A_Index%, Hotkey%A_Index%, |, `n, 1
 	}
 	IniWrite, % StartUp_GUI, c:\SimplyHotkeys.ini, MEM, StartUp_GUI
-	
-	return
+return
 
 ;Loads data from c:\SimplyHotkeys.ini
 Settings_load:
@@ -123,7 +123,24 @@ Settings_load:
 		StringReplace, Hotkey%A_Index%, Hotkey%A_Index%, |, `n, 1
 	}
 	IniRead, StartUp_GUI, c:\SimplyHotkeys.ini, MEM, StartUp_GUI
-	return
+return
+
+;Saves changes to registry, if you want the app to start with windows or not
+Registry_save:
+	;We need to check if the user is allowed to change in registry, is this a admin user? and tell the user if he's not
+	MsgBox, registry save		;just for testing purposes
+	GoSub, Registry_load
+Return
+
+;Saves changes to registry, if you want the app to start with windows or not
+Registry_load:
+	RegRead, tempvar, HKEY_LOCAL_MACHINE, SOFTWARE\Microsoft\Windows\CurrentVersion\Run, Persistence
+	if ErrorLevel   ; i.e. it's not blank or zero.
+		MsgBox, Registry har ikke denne...%ErrorLevel%...%tempvar%...%A_LastError%
+	else
+		MsgBox, Registry har denne
+	
+Return
 
 ;Saves to file each time you edit a field
 GuiSubmit:
@@ -133,16 +150,14 @@ GuiSubmit:
 	{ 	GuiControlGet, newText,, Edit1
 		LV_Modify(LV_GetNext(),,,,newText)
 	}	
-	return
+return
 
 ;Saves and closes the application when you exit from the systemtray
 GuiClose:
-;msgbox,,, % "---" A_ExitReason "---", 1
 	if not (A_ExitReason)
 	{	GoSub, Settings_save
-		;traytip,, % "Saved successfully to file`nCTRL + 1: " Hotkey1 "`nCTRL + 2: " Hotkey2 "`nCTRL + 3: " Hotkey3 "`nCTRL + 4: " Hotkey4 "`nCTRL + 5: " Hotkey5 "`nCTRL + 6: " Hotkey6 "`nCTRL + 7: " Hotkey7 "`nCTRL + 8: " Hotkey8 "`nCTRL + 9: " Hotkey9 "`nCTRL + 0: " Hotkey10
 		Gui, destroy
 	}	else ExitApp
-	return
+return
 	
 F12::ExitApp

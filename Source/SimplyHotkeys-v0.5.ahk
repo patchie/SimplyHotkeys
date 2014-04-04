@@ -129,7 +129,7 @@ return
 Registry_save:
 	;We need to check if the user is allowed to change in registry, is this a admin user? and tell the user if he's not
 	MsgBox, registry save		;just for testing purposes
-	GoSub, Registry_load
+	GoSub, Registry_load		;just for testing purposes
 Return
 
 ;Saves changes to registry, if you want the app to start with windows or not

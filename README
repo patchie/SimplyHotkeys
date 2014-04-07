@@ -53,6 +53,7 @@ A: You can add for example {tab} or {enter}, to make it push
 
 TODO
 ----
+* Make it save each time it looses focus
 * Change the rightclick systemtray menu
 * Adding a better howto in the gui
 * Adding "hotstrings" tab (http://ahkscript.org/docs/Hotstrings.htm)

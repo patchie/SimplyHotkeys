@@ -9,6 +9,7 @@ CONTENTS OF THIS FILE
  * Introduction
  * Requirements
  * Installation
+ * Python version
  * Configuration
  * Troubleshooting
  * FAQ
@@ -21,6 +22,10 @@ use Microsoft Windows. In this application it will be possible
 to add text and keystrokes that you can activate via hotkeys 
 in any application running on Microsoft Windows.
 
+Starting from version 0.6 the application is implemented in Python
+(``Source/SimplyHotkeys-v0.6.py``) while the original AutoHotKey
+implementation (``Source/SimplyHotkeys-v0.5.ahk``) is still available.
+
 REQUIREMENTS
 ------------
 This application is tested on the following systems:
@@ -29,10 +34,18 @@ This application is tested on the following systems:
 
 INSTALLATION
 ------------
-You will find SimplyHotkeys-setup-v0.5.exe inside the "Installer" 
+You will find SimplyHotkeys-setup-v0.5.exe inside the "Installer"
 folder here on github(https://github.com/patchie/SimplyHotkeys).
-The installer will automatically set SimplyHotkeys to startup 
+The installer will automatically set SimplyHotkeys to startup
 with windows. You can change this feature inside the application.
+
+Version 0.6 is distributed as a Python script. Run ``Source/SimplyHotkeys-v0.6.py``
+with Python 3.12 or newer.
+
+PYTHON VERSION
+--------------
+SimplyHotkeys 0.6 requires Python 3.12 or newer and depends on the
+``keyboard`` package for global hotkey support.
 
 CONFIGURATION
 -------------
